@@ -53,7 +53,7 @@ end
 
 macro rand!(r, d)
     varName = r
-    r = eval(r)
+    r = eval("$r")
     d = eval(d)
     t = typeof(r[1])
     ret = Array{t}(undef, d)
