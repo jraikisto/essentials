@@ -21,7 +21,7 @@ function convertInt(vec::AbstractArray)
 end
 
 macro rand!(r)
-    #varName = r
+    varName = r
 
     println(typeof("$r"))
     local v = eval("$(r)")
