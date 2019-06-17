@@ -2,7 +2,7 @@ __precompile__()
 
 module essentials
 
-export log_calculator, convertInt, @rand!
+export log_calculator, convertInt, pop_wand, @rand!
 
 function log_calculator(purity; ploidy=2)
     print("Expected logratios:")
@@ -21,9 +21,9 @@ function convertInt(vec::AbstractArray)
 end
 
 macro rand!(r)
+    return esc(quote
     varName = r
 
-    println(r)
     r = eval(r)
     local l = length(r)
     local wanted = rand(1:l)
@@ -35,7 +35,7 @@ macro rand!(r)
     else
         out = vcat(r[1:wanted-1], r[wanted+1:end])
     end
-    return esc(quote
+
         $(varName) = $(out)
         $(ret)
     end)
