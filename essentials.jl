@@ -21,7 +21,7 @@ function convertInt(vec::AbstractArray)
 end
 
 macro test(t)
-    return :($(esc(t))
+    return :($(esc(t)))
 end
 
 macro rand!(r)
