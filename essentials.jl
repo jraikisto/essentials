@@ -21,7 +21,8 @@ function convertInt(vec::AbstractArray)
 end
 
 macro rand!(r)
-    varName = r
+    varName = string(r)
+    println(r)
     r = eval(r)
     local l = length(r)
     local wanted = rand(1:l)
