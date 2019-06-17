@@ -26,8 +26,10 @@ end
 
 macro rand!(r)
     varName = string(r)
+    println(varName)
+
     println(r)
-    r = eval(r)
+    r = eval(:(esc(r)))
     local l = length(r)
     local wanted = rand(1:l)
     local ret = r[wanted]
