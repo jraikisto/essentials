@@ -23,7 +23,7 @@ end
 macro rand!(r)
     varName = r
 
-    
+    println(r)
     r = eval(r)
     local l = length(r)
     local wanted = rand(1:l)
