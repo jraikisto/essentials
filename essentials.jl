@@ -21,21 +21,21 @@ function convertInt(vec::AbstractArray)
 end
 
 macro rand!(r)
-    return esc(quote
     varName = r
 
-    r = eval(r)
-    local l = length(r)
+    println(r)
+    local v = esc(r)
+    local l = length(v)
     local wanted = rand(1:l)
-    local ret = r[wanted]
+    local ret = v[wanted]
     if wanted == 1
-        out = r[2:end]
+        out = v[2:end]
     elseif wanted == l
-        out = r[1:end-1]
+        out = v[1:end-1]
     else
-        out = vcat(r[1:wanted-1], r[wanted+1:end])
+        out = vcat(v[1:wanted-1], v[wanted+1:end])
     end
-
+    return esc(quote
         $(varName) = $(out)
         $(ret)
     end)
