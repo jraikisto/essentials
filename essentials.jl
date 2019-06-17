@@ -2,7 +2,7 @@ __precompile__()
 
 module essentials
 
-export log_calculator, convertInt, pop_wand, @rand!, @test
+export log_calculator, convertInt, @rand!
 
 function log_calculator(purity; ploidy=2)
     print("Expected logratios:")
@@ -20,26 +20,18 @@ function convertInt(vec::AbstractArray)
     sum(f[vec])
 end
 
-macro test(r)
-    return quote
-        $r
-    end
-end
-
 macro rand!(r)
     varName = r
-
-    println("$r")
-    local v = eval("$(r)")
-    local l = length(v)
+    r = eval(r)
+    local l = length(r)
     local wanted = rand(1:l)
-    local ret = v[wanted]
+    local ret = r[wanted]
     if wanted == 1
-        out = v[2:end]
+        out = r[2:end]
     elseif wanted == l
-        out = v[1:end-1]
+        out = r[1:end-1]
     else
-        out = vcat(v[1:wanted-1], v[wanted+1:end])
+        out = vcat(r[1:wanted-1], r[wanted+1:end])
     end
     return esc(quote
         $(varName) = $(out)
@@ -59,7 +51,7 @@ end
 
 macro rand!(r, d)
     varName = r
-    r = eval("$r")
+    r = eval(r)
     d = eval(d)
     t = typeof(r[1])
     ret = Array{t}(undef, d)
