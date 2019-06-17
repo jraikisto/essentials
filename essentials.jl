@@ -2,7 +2,7 @@ __precompile__()
 
 module essentials
 
-export log_calculator, convertInt, @rand!
+export log_calculator, convertInt, @rand!, @test
 
 function log_calculator(purity; ploidy=2)
     print("Expected logratios:")
@@ -18,6 +18,10 @@ function convertInt(vec::AbstractArray)
     bits = length(vec)
     f = [2^(x) for x in bits-1:-1:0]
     sum(f[vec])
+end
+
+macro test(t)
+    return :($t)
 end
 
 macro rand!(r)
