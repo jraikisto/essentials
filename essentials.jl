@@ -28,7 +28,8 @@ macro rand!(r)
     varName = string(r)
     println(varName)
 
-    r = eval(:($(esc(r))))
+    r = :($(esc(r)))
+    println(r)
     local l = length(r)
     local wanted = rand(1:l)
     local ret = r[wanted]
