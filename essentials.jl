@@ -24,7 +24,7 @@ macro rand!(r)
     varName = r
 
     println(r)
-    local v = esc(r)
+    local v = eval(esc(r))
     local l = length(v)
     local wanted = rand(1:l)
     local ret = v[wanted]
