@@ -1,7 +1,7 @@
 __precompile__()
 
 module essentials
-
+#I don't really want to export pop_wand, but I don't know how else I could bring it into global scope
 export log_calculator, convertInt, pop_wand, @rand!
 
 function log_calculator(purity; ploidy=2)
@@ -37,20 +37,24 @@ macro rand!(r)
         wanted = rand(1:l)
         ret = $(r)[wanted]
         out = pop_wand($(r), wanted)
-        #=if wanted == 1
-            out = $(r)[2:end]
-        elseif wanted == l
-            out = $(r)[1:end-1]
-        else
-            out = vcat($(r)[1:wanted-1], $(r)[wanted+1:end])
-        end=#
         $(r) = out
         ret
     end)
 end
 
 macro rand!(r, d)
-    varName = r
+    return esc(quote
+        t = typeof($(r)[1])
+        ret = Array{t}(undef, $(d))
+        for i in 1:$(d))
+            l = length($(r))
+            wanted = rand(1:l)
+            ret[i] = $(r)[wanted]
+            $(r) = pop_wand($(r), wanted)
+        end
+        ret
+    end)
+    #=varName = r
     r = eval(r)
     d = eval(d)
     t = typeof(r[1])
@@ -65,7 +69,7 @@ macro rand!(r, d)
     return esc(quote
         $(varName) = $(out)
         $(ret)
-    end)
+    end)=#
 end
 
 end
