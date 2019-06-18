@@ -20,38 +20,6 @@ function convertInt(vec::AbstractArray)
     sum(f[vec])
 end
 
-macro rand!(r)
-    return esc(quote
-        l = length($(r))
-        wanted = rand(1:l)
-        ret = $(r)[wanted]
-        if wanted == 1
-            out = $(r)[2:end]
-        elseif wanted == l
-            out = $(r)[1:end-1]
-        else
-            out = vcat($(r)[1:wanted-1], $(r)[wanted+1:end])
-        end
-        $(r) = out
-        ret
-    end)
-    #=varName = r
-    r = eval(r)
-    local l = length(r)
-    local wanted = rand(1:l)
-    local ret = r[wanted]
-    if wanted == 1
-        out = r[2:end]
-    elseif wanted == l
-        out = r[1:end-1]
-    else
-        out = vcat(r[1:wanted-1], r[wanted+1:end])
-    end
-    return esc(quote
-        $(varName) = $(out)
-        $(ret)
-    end)=#
-end
 function pop_wand(r, wanted)
     if wanted == 1
         out = r[2:end]
@@ -61,6 +29,24 @@ function pop_wand(r, wanted)
         out = vcat(r[1:wanted-1], r[wanted+1:end])
     end
     out
+end
+
+macro rand!(r)
+    return esc(quote
+        l = length($(r))
+        wanted = rand(1:l)
+        ret = $(r)[wanted]
+        out = pop_wand($(r), wanted)
+        #=if wanted == 1
+            out = $(r)[2:end]
+        elseif wanted == l
+            out = $(r)[1:end-1]
+        else
+            out = vcat($(r)[1:wanted-1], $(r)[wanted+1:end])
+        end=#
+        $(r) = out
+        ret
+    end)
 end
 
 macro rand!(r, d)
