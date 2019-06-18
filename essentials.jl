@@ -46,7 +46,7 @@ macro rand!(r, d)
     return esc(quote
         t = typeof($(r)[1])
         ret = Array{t}(undef, $(d))
-        for i in 1:$(d))
+        for i in 1:$(d)
             l = length($(r))
             wanted = rand(1:l)
             ret[i] = $(r)[wanted]
