@@ -2,7 +2,10 @@ __precompile__()
 
 module essentials
 #I don't really want to export pop_wand, but I don't know how else I could bring it into global scope
-export log_calculator, convertInt, pop_wand, @rand!
+export log_calculator, convertInt, pop_wand, readdlm
+export @rand!
+
+using DelimitedFiles
 
 function log_calculator(purity; ploidy=2)
     print("Expected logratios:")
@@ -30,7 +33,7 @@ function pop_wand(r, wanted)
     end
     out
 end
-#I wouldnt want to do all the computing inside quotes, but I couldnt find a way to bring variables into the scope  
+#I wouldnt want to do all the computing inside quotes, but I couldnt find a way to bring variables into the scope
 
 macro rand!(r)
     return esc(quote
@@ -56,6 +59,21 @@ macro rand!(r, d)
         end
         ret
     end)
+end
+
+function readdlm(path; parse=true)
+    if parse
+        DelimitedFiles.readdlm(path)
+    else
+        r = readlines(path)
+        out = fill("", length(r), length(split(r[1], "\t")))
+        for i in 1:length(r)
+            s = split(r[i], "\t")
+            @assert length(s) == size(out, 2) "All the rows must have equal amuount of columns"
+            out[i, :] = s
+        end
+        out
+    end
 end
 
 end
