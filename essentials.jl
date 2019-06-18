@@ -21,8 +21,21 @@ function convertInt(vec::AbstractArray)
 end
 
 macro rand!(r)
-    r = esc(r)
-    varName = r
+    return quote
+        l = length($(r))
+        wanted = rand(1:l)
+        ret = $(r)[wanted]
+        if wanted == 1
+            out = $(r)[2:end]
+        elseif wanted == l
+            out = $(r)[1:end-1]
+        else
+            out = vcat($(r)[1:wanted-1], $(r)[wanted+1:end])
+        end
+        $(r) = out
+        ret
+    end
+    #=varName = r
     r = eval(r)
     local l = length(r)
     local wanted = rand(1:l)
@@ -37,7 +50,7 @@ macro rand!(r)
     return esc(quote
         $(varName) = $(out)
         $(ret)
-    end)
+    end)=#
 end
 function pop_wand(r, wanted)
     if wanted == 1
