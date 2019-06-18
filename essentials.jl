@@ -2,7 +2,7 @@ __precompile__()
 
 module essentials
 #I don't really want to export pop_wand, but I don't know how else I could bring it into global scope
-export log_calculator, convertInt, pop_wand, readdlm
+export log_calculator, convertInt, pop_wand, readdlm, cbs
 export @rand!
 
 using DelimitedFiles
@@ -83,6 +83,29 @@ function readdlm(path::String; parse=true)
         end
         out
     end
+end
+
+function cbs(u, g, j)
+	z = []
+	n = length(u[g:j])
+	sn = sum(u[g:end])
+	sj = sum(u[g:j])
+	if g >= j
+		error("There seems to be too much variation in copynumber. Are you sure your threshold is not too small?")
+	end
+	for i in g:j
+		s = sum(u[1:i])
+		first = ((1/(j-i)) + (1/(n-j+i)))
+		first = 1/sqrt(first)
+		second = ((sj-s)/(j-i)) - ((sn-sj+s)/(n-j+i))
+
+		if isnan(abs(first*second))
+			push!(z, 0)
+			continue
+		end
+		push!(z, abs(first*second))
+	end
+	return findmax(z)[2] + g
 end
 
 end
