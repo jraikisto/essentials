@@ -61,7 +61,7 @@ macro rand!(r, d)
     end)
 end
 
-function readdlm(path; parse=true)
+function readdlm(path::String; parse=true)
     if parse
         DelimitedFiles.readdlm(path)
     else
