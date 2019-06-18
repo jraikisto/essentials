@@ -66,11 +66,20 @@ function readdlm(path::String; parse=true)
         DelimitedFiles.readdlm(path)
     else
         r = readlines(path)
-        out = fill("", length(r), length(split(r[1], "\t")))
-        for i in 1:length(r)
-            s = split(r[i], "\t")
+        io = open(path, "r")
+        lines = countlines(open(path))
+        l1 = readline(io)
+        col1 = split(l1, r"\t")
+        c = length(col1)
+        out = fill("", lines, c)
+        out[1, :] = col1
+        row = 2
+        while !eof(io)
+            line = readline(io)
+            s = split(line, r"\t")
             @assert length(s) == size(out, 2) "All the rows must have equal amuount of columns"
-            out[i, :] = s
+            out[row, :] = s
+            row += 1
         end
         out
     end
