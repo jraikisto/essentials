@@ -30,6 +30,7 @@ function pop_wand(r, wanted)
     end
     out
 end
+#I wouldnt want to do all the computing inside quotes, but I couldnt find a way to bring variables into the scope  
 
 macro rand!(r)
     return esc(quote
@@ -47,32 +48,14 @@ macro rand!(r, d)
         t = typeof($(r)[1])
         ret = Array{t}(undef, $(d))
         for i in 1:$(d)
-            println("asd")
             global $(r)
             l = length($(r))
-            println("qwe")
             wanted = rand(1:l)
             ret[i] = $(r)[wanted]
             $(r) = pop_wand($(r), wanted)
         end
         ret
     end)
-    #=varName = r
-    r = eval(r)
-    d = eval(d)
-    t = typeof(r[1])
-    ret = Array{t}(undef, d)
-    for i in 1:d
-        l = length(r)
-        wanted = rand(1:l)
-        ret[i] = r[wanted]
-        r = pop_wand(r, wanted)
-    end
-    out = r
-    return esc(quote
-        $(varName) = $(out)
-        $(ret)
-    end)=#
 end
 
 end
