@@ -21,7 +21,7 @@ function convertInt(vec::AbstractArray)
 end
 
 macro rand!(r)
-    return quote
+    return esc(quote
         l = length($(r))
         wanted = rand(1:l)
         ret = $(r)[wanted]
@@ -34,7 +34,7 @@ macro rand!(r)
         end
         $(r) = out
         ret
-    end
+    end)
     #=varName = r
     r = eval(r)
     local l = length(r)
