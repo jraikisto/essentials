@@ -2,7 +2,7 @@ __precompile__()
 
 module essentials
 
-export log_calculator, convertInt, @rand!
+export log_calculator, convertInt, pop_wand, @rand!
 
 function log_calculator(purity; ploidy=2)
     print("Expected logratios:")
