@@ -2,7 +2,7 @@ __precompile__()
 
 module essentials
 
-export log_calculator, convertInt, @rand!, @test
+export log_calculator, convertInt, @rand!
 
 function log_calculator(purity; ploidy=2)
     print("Expected logratios:")
@@ -20,16 +20,10 @@ function convertInt(vec::AbstractArray)
     sum(f[vec])
 end
 
-macro test(t)
-    return :($(esc(t)))
-end
-
 macro rand!(r)
-    varName = string(r)
-    println(varName)
-
-    r = eval(:(esc(r)))
-    println(r)
+    r = esc(r)
+    varName = r
+    r = eval(r)
     local l = length(r)
     local wanted = rand(1:l)
     local ret = r[wanted]
